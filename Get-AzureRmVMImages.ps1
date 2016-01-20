@@ -2,6 +2,8 @@ param ( $location = 'westus' )
 
 $start = Get-Date
 
+Login-AzureRmAccount
+
 $images = @()
 
 $publishers = ( Get-AzureRmVMImagePublisher -Location $location ).PublisherName
@@ -62,8 +64,9 @@ else
 if (Test-Path $output)
 {
 	"Output: $output"
+	"Images: $($images.count)"
 }
 
 $end = Get-Date
 $duration = New-Timespan -Start $start -End $end
-Write-Host ('Duration: ' +  ('{0:hh}:{0:mm}:{0:ss}.{0:ff}' -f $duration)) -color Cyan
+Write-Host ('Duration: ' +  ('{0:hh}:{0:mm}:{0:ss}.{0:ff}' -f $duration))
