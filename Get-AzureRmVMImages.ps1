@@ -2,7 +2,7 @@ param ( $location = 'westus' )
 
 $start = Get-Date
 
-$global:images = @()
+$images = @()
 
 $publishers = ( Get-AzureRmVMImagePublisher -Location $location ).PublisherName
 
@@ -30,10 +30,7 @@ $publishers | foreach {
 						$versions | foreach {
 
 							$version = $_
-							#Get-AzureRmvmimage -Location $location -PublisherName $publisher -Offer $offer -Skus $sku -Version $version
 
-							#"Publisher: $publisher Offer: $offer Sku: $sku Version: $version"
-														
 							$image = [pscustomobject]@{
 								Publisher = $publisher
 								Offer     = $offer
@@ -42,7 +39,7 @@ $publishers | foreach {
 								Command   = "Get-AzureRmVMImage -Location $location -PublisherName $publisher -Offer $offer -Skus $sku -Version $version"
 							}
 							"Publisher: $($image.publisher) Offer: $($image.offer) Sku: $($image.sku) Version: $($image.version)"
-							$global:images += $image
+							$images += $image
 						}
 					}
 				}
@@ -54,12 +51,12 @@ $publishers | foreach {
 if (get-command Export-Excel -ErrorAction SilentlyContinue)
 {
 	$output = '.\images.xlsx'
-	$global:images | Export-Excel $output
+	$images | Export-Excel $output
 }
 else
 {
 	$output = '.\images.csv'
-	$global:images | Export-Csv -path $output -NoTypeInformation	
+	$images | Export-Csv -path $output -NoTypeInformation	
 }
 
 if (Test-Path $output)
