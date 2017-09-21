@@ -10,9 +10,24 @@ function Get-JsonFromSerialLog ($serialLogFilePath)
     $serialLogFileName = split-path -Path $serialLogFilePath -Leaf
     $jsonFileName = "$($serialLogFileName.SubString(0,$serialLogFileName.Length-4)).json"
     $jsonFilePath = "$env:TEMP\$jsonFileName"
-    $serialLog = get-content -Path $serialLogFilePath -Raw
-    for($i=0; $i -le ($serialLog.count); $i++){if($serialLog[$i] -match 'Microsoft Azure VM Health Report - Start'){$jsonString = $serialLog[$i+1]}}
-    $json = $jsonString | ConvertFrom-Json
+    $serialLog = get-content -Path $serialLogFilePath
+    for ($i = ($serialLog.count); $i -ne 0; $i--) {
+        if ($serialLog[$i] -match 'Microsoft Azure VM Health Report - End') 
+        {
+            $jsonString = $serialLog[$i-1]        
+            try
+            {
+                $json = $jsonString | ConvertFrom-Json -ErrorAction SilentlyContinue
+            }
+            catch
+            {
+                write-verbose "ConvertFrom-Json failed, will try next entry"
+                $i--
+            }
+            if ($json) {break}
+        }
+    }
+    
     if ($json){$json | ConvertTo-Json | out-file $jsonFilePath}
     if (test-path $jsonFilePath)
     {
@@ -22,6 +37,10 @@ function Get-JsonFromSerialLog ($serialLogFilePath)
         {
             invoke-item $jsonFilePath
         }
+    }
+    else 
+    {
+        write-host "No VM Health Report entries found."
     }
 }
 
@@ -53,11 +72,11 @@ if ($resourceGroupName -and $name)
     #TODO If boot diag storage account can reside in a different RG than the VM's RG, need a different way to get the RG of the boot diag storage account
     $storageContext = New-AzureStorageContext -StorageAccountName $storageAccountName -StorageAccountKey (Get-AzureRmStorageAccountKey -ResourceGroupName $resourceGroupName -Name $storageAccountName)[0].Value
     $blobs = get-azurestorageblob -Container $storageContainer -Context $storageContext
-    $log = $blobs | where {$_.Name.EndsWith('.serialconsole.log')} | select -first 1
+    $log = $blobs | where {$_.Name.EndsWith('.serialconsole.log')} | select -first 1    
     $log | Get-AzureStorageBlobContent -Destination $env:TEMP -Force | Out-Null
     $logFilePath = "$env:TEMP\$($log.Name)"
     Get-JsonFromSerialLog $logFilePath
-    "`nserial log:     $logFilePath"    
+    "serial log:     $logFilePath"    
 }
 elseif ($path)
 {
