@@ -1,9 +1,9 @@
 param(
-    $resourceGroupName = 'clwestcentralusrg1',
-    $storageAccountName = 'clwestcentralussa1',
-    $location = 'westcentralus',
-    $containerName = 'images',
-    $localFilePath = "\\ws\images$\ws2003-4GBaligned.vhd",
+    $resourceGroupName,
+    $storageAccountName,
+    $location,
+    $containerName,
+    $localFilePath,
     $skuName ='Standard_LRS'
 )
 
@@ -42,4 +42,3 @@ else
 $command = "Add-AzureRmVhd -ResourceGroupName $resourceGroupName -Destination $destination -LocalFilePath $localFilePath"
 write-host $command 
 Invoke-Expression $command
-#Add-AzureRmVhd -ResourceGroupName $resourceGroupName -Destination $destination -LocalFilePath $localFilePath
