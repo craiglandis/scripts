@@ -23,7 +23,7 @@ if ($resourceGroup)
 }
 else
 {
-    Write-Host "Make sure storage account exists: $storageAccountName"    
+    Write-Host "Resource group not found: $resourceGroup"    
     exit
 }
 
@@ -40,7 +40,7 @@ if ($storageAccount)
 }
 else
 {
-    Write-Host "Make sure storage account exists: $storageAccountName"    
+    Write-Host "Storage account not found: $storageAccountName"    
     exit
 }
 
