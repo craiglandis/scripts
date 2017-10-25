@@ -23,7 +23,7 @@ if ($resourceGroup)
 }
 else
 {
-    Write-Host "Resource group not found: $resourceGroup"    
+    Write-Host "Resource group not found: $resourceGroupName"    
     exit
 }
 
