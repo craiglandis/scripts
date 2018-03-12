@@ -4,7 +4,7 @@
 
 .DESCRIPTION
 
-    PowerShell snippets include with the PowerShell extension for VSCode reside in a PowerShell.json file:
+    PowerShell snippets included with the PowerShell extension for VSCode reside in a PowerShell.json file:
     
     C:\Users\<username>\.vscode\extensions\ms-vscode.powershell-<version>\snippets\PowerShell.json
 
