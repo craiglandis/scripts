@@ -1,8 +1,8 @@
 param(
     [string]$resourceGroupName,
     [string]$name,
-    [string]$userName = 'craig',
-    [string]$password = $password
+    [string]$userName,
+    [string]$password
 )
 
 <# 
