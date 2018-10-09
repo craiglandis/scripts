@@ -1,7 +1,9 @@
 $newItem = New-ItemProperty -Path HKCU:\Software\Microsoft\ServerManager -Name DoNotOpenServerManagerAtLogon -PropertyType DWORD -Value 1 –force
-
 $nestedGuestVmName = 'ProblemVM'
+$batchFileContents = @"
+start $env:windir\System32\mmc.exe $env:windir\System32\virtmgmt.msc
+start $env:windir\System32\vmconnect.exe localhost $nestedGuestVmName
+"@
 $batchFile = "$env:allusersprofile\Microsoft\Windows\Start Menu\Programs\StartUp\RunHyperVManagerAndVMConnect.cmd"
-"start $env:windir\System32\mmc.exe $env:windir\System32\virtmgmt.msc" | out-file -FilePath $batchFile -Force -Encoding Default
-"start $env:windir\System32\vmconnect.exe localhost $nestedGuestVmName" | out-file -FilePath $batchFile -Append -Encoding Default
+$batchFileContents | out-file -FilePath $batchFile -Force -Encoding Default
 get-content $batchFile
