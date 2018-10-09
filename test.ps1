@@ -4,6 +4,6 @@ $batchFileContents = @"
 start $env:windir\System32\mmc.exe $env:windir\System32\virtmgmt.msc
 start $env:windir\System32\vmconnect.exe localhost $nestedGuestVmName
 "@
-$batchFile = "$env:allusersprofile\Microsoft\Windows\Start Menu\Programs\StartUp\RunHyperVManagerAndVMConnect.cmd"
+$batchFile = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\RunHyperVManagerAndVMConnect.cmd"
 $batchFileContents | out-file -FilePath $batchFile -Force -Encoding Default
 get-content $batchFile
