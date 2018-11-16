@@ -2,62 +2,53 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "timestamp": {
+      "type": "string"
+    },
     "vmName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name for the Virtual Machine."
-      }
+        "type": "string",
+        "defaultValue": "[concat('vm', parameters('timestamp'))]"
     },
     "adminUsername": {
-      "type": "string",
-      "metadata": {
-        "description": "Username for the Virtual Machine."
-      }
+        "type": "string",
+        "defaultValue": "azureuser"
+    },
+    "adminPasswordPlainText": {
+        "type": "string",
+        "defaultValue": "[uniqueString(parameters('timestamp'))]"
     },
     "adminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Password for the Virtual Machine."
-      }
+        "type": "securestring",
+        "defaultValue": "[parameters('adminPasswordPlainText')]"
     },
     "dnsLabelPrefix": {
-      "type": "string",
-      "metadata": {
-        "description": "Unique DNS Name for the Public IP used to access the Virtual Machine."
-      }
+        "type": "string",
+        "defaultValue": "[parameters('vmName')]"
     },
     "windowsOSVersion": {
+        "type": "string",
+        "defaultValue": "2016-Datacenter",
+        "allowedValues": [
+          "2008-R2-SP1",
+          "2012-Datacenter",
+          "2012-R2-Datacenter",
+          "2016-Nano-Server",
+          "2016-Datacenter-with-Containers",
+          "2016-Datacenter"
+        ]
+    },
+    "vmSize": {
       "type": "string",
-      "defaultValue": "2016-Datacenter",
-      "allowedValues": [
-        "2008-R2-SP1",
-        "2012-Datacenter",
-        "2012-R2-Datacenter",
-        "2016-Nano-Server",
-        "2016-Datacenter-with-Containers",
-        "2016-Datacenter"
-      ],
-      "metadata": {
-        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
-      }
+      "defaultValue": "Standard_D2_v3"
     },
     "domainJoinUserName": {
-      "type": "string",
-      "metadata": {
-        "description": "Domain NetBiosName plus User name of a domain user with sufficient rights to perfom domain join operation. E.g. domain\\username"
-      }
+        "type": "string"
     },
     "domainJoinUserPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Domain user password"
-      }
-    },
+        "type": "securestring"
+      },
     "domainFQDN": {
-      "type": "string",
-      "metadata": {
-        "description": "Domain FQDN where the virtual machine will be joined"
-      }
+      "type": "string"
     },
     "ouPath": {
       "type": "string",
@@ -68,28 +59,50 @@
     },
     "location": {
       "type": "string",
-      "defaultValue": "[resourceGroup().location]",
-      "metadata": {
-        "description": "Location for all resources."
-      }
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "storageAccountName": {
+      "type": "string",
+      "defaultValue": "[concat('sa', parameters('timestamp'))]"
+    },
+    "nicName": {
+      "type": "string",
+      "defaultValue": "[concat('nic', parameters('timestamp'))]"
+    },
+    "publicIPAddressName": {
+      "type": "string",
+      "defaultValue": "[concat('pip', parameters('timestamp'))]"
+    },
+    "addressPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/16"
+    },
+    "subnetName": {
+      "type": "string",
+      "defaultValue": "adSubnet"
+    },
+    "subnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.0.0.0/24"
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "adVNET"
+    },
+    "subnetRef": {
+      "type": "string",
+      "defaultValue": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]"
+    },
+    "domainJoinOptions": {
+      "type": "int",
+      "defaultValue": 3
     }
-  },
-  "variables": {
-    "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'sawinvm')]",
-    "nicName": "myVMNic",
-    "addressPrefix": "10.0.0.0/16",
-    "subnetName": "adSubnet",
-    "subnetPrefix": "10.0.0.0/24",
-    "publicIPAddressName": "myPublicIP",
-    "virtualNetworkName": "adVNET",
-    "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
-    "domainJoinOptions": 3
   },
   "resources": [
     {
+      "apiVersion": "2018-07-01",
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('storageAccountName')]",
-      "apiVersion": "2016-01-01",
+      "name": "[parameters('storageAccountName')]",
       "location": "[parameters('location')]",
       "sku": {
         "name": "Standard_LRS"
@@ -98,9 +111,9 @@
       "properties": {}
     },
     {
-      "apiVersion": "2016-03-30",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPAddressName')]",
+      "name": "[parameters('publicIPAddressName')]",
       "location": "[parameters('location')]",
       "properties": {
         "publicIPAllocationMethod": "Dynamic",
@@ -110,34 +123,34 @@
       }
     },
     {
-      "apiVersion": "2016-03-30",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/virtualNetworks",
-      "name": "[variables('virtualNetworkName')]",
+      "name": "[parameters('virtualNetworkName')]",
       "location": "[parameters('location')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
-            "[variables('addressPrefix')]"
+            "[parameters('addressPrefix')]"
           ]
         },
         "subnets": [
           {
-            "name": "[variables('subnetName')]",
+            "name": "[parameters('subnetName')]",
             "properties": {
-              "addressPrefix": "[variables('subnetPrefix')]"
+              "addressPrefix": "[parameters('subnetPrefix')]"
             }
           }
         ]
       }
     },
     {
-      "apiVersion": "2016-03-30",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[variables('nicName')]",
+      "name": "[parameters('nicName')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
-        "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+        "[resourceId('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]",
+        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkName'))]"
       ],
       "properties": {
         "ipConfigurations": [
@@ -146,10 +159,10 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
               },
               "subnet": {
-                "id": "[variables('subnetRef')]"
+                "id": "[parameters('subnetRef')]"
               }
             }
           }
@@ -157,17 +170,17 @@
       }
     },
     {
-      "apiVersion": "2017-03-30",
+      "apiVersion": "2018-10-01",
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('vmName')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-        "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+        "[resourceId('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces/', parameters('nicName'))]"
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_A2"
+          "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
           "computerName": "[parameters('vmName')]",
@@ -184,42 +197,36 @@
           "osDisk": {
             "createOption": "FromImage"
           },
-          "dataDisks": [
-            {
-              "diskSizeGB": 1023,
-              "lun": 0,
-              "createOption": "Empty"
-            }
-          ]
+          "dataDisks": []
         },
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]"
             }
           ]
         },
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
+            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))).primaryEndpoints.blob]"
           }
         }
       }
     },
     {
-      "apiVersion": "2018-06-01",
+      "apiVersion": "2018-10-01",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('vmName'),'/','enablelogging')]",
+      "name": "[concat(parameters('vmName'), '/', 'enablelogging')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+          "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
       ],
       "properties": {
           "publisher": "Microsoft.Compute",
           "type": "CustomScriptExtension",
           "typeHandlerVersion": "1.9",
-          "autoUpgradeMinorVersion":true,
+          "autoUpgradeMinorVersion": true,
           "settings": {
               "fileUris": [
                   "https://raw.githubusercontent.com/craiglandis/scripts/master/Enable-Logging.ps1"
@@ -229,12 +236,12 @@
       }
     },
     {
-      "apiVersion": "2018-06-01",
+      "apiVersion": "2018-10-01",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('vmName'),'/', 'joindomain')]",
+      "name": "[concat(parameters('vmName'), '/', 'joindomain')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName'),'/extensions/enablelogging')]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'), '/extensions/enablelogging')]"
       ],
       "properties": {
         "publisher": "Microsoft.Compute",
@@ -245,7 +252,7 @@
           "Name": "[parameters('domainFQDN')]",
           "User": "[parameters('domainJoinUserName')]",
           "Restart": "true",
-          "Options": "[variables('domainJoinOptions')]",
+          "Options": "[parameters('domainJoinOptions')]",
           "OUPath": "[parameters('ouPath')]"
         },
         "protectedSettings": {
@@ -257,7 +264,7 @@
   "outputs": {
     "hostname": {
       "type": "string",
-      "value": "[reference(variables('publicIPAddressName')).dnsSettings.fqdn]"
+      "value": "[reference(parameters('publicIPAddressName')).dnsSettings.fqdn]"
     }
   }
 }
