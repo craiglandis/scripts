@@ -14,11 +14,9 @@ if (-not $resourceGroup)
     New-AzureRmResourceGroup -Name $resourceGroupName -Location $location -ErrorAction Stop
 }
 
-$secureString = ConvertTo-SecureString $password -AsPlainText -Force
-
 $templateParametersObject = @{
     adminUsername = $userName
-    adminPassword = "$secureString"
+    adminPassword = $password
     domainName = $domainName
     dnsPrefix = $dnsPrefix
 }
