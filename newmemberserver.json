@@ -65,6 +65,10 @@
       "type": "string",
       "defaultValue": "[concat('sa', parameters('timestamp'))]"
     },
+    "diagStorageAccountName": {
+        "type": "string",
+        "defaultValue": "[concat('diagsa', parameters('timestamp'))]"
+    },
     "nicName": {
       "type": "string",
       "defaultValue": "[concat('nic', parameters('timestamp'))]"
@@ -109,6 +113,17 @@
       },
       "kind": "Storage",
       "properties": {}
+    },
+    {
+        "apiVersion": "2018-07-01",
+        "type": "Microsoft.Storage/storageAccounts",
+        "name": "[parameters('diagStorageAccountName')]",
+        "location": "[parameters('location')]",
+        "sku": {
+          "name": "Standard_LRS"
+        },
+        "kind": "Storage",
+        "properties": {}
     },
     {
       "apiVersion": "2018-08-01",
@@ -209,7 +224,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))).primaryEndpoints.blob]"
+            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', parameters('diagStorageAccountName'))).primaryEndpoints.blob]"
           }
         }
       }
