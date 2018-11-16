@@ -210,10 +210,10 @@
     {
       "apiVersion": "2018-06-01",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(variables('vmName'),'/', 'enablelogging')]",
+      "name": "[concat(parameters('vmName'),'/','enablelogging')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-          "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'))]"
+          "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
       ],
       "properties": {
           "publisher": "Microsoft.Compute",
@@ -231,10 +231,10 @@
     {
       "apiVersion": "2018-06-01",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(variables('vmName'),'/', 'joindomain')]",
+      "name": "[concat(parameters('vmName'),'/', 'joindomain')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),'/extensions/enablelogging')]"
+        "[concat('Microsoft.Compute/virtualMachines/',parameters('vmName'),'/extensions/enablelogging')]"
       ],
       "properties": {
         "publisher": "Microsoft.Compute",
