@@ -2,6 +2,12 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "vmName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name for the Virtual Machine."
+      }
+    },
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -75,7 +81,6 @@
     "subnetName": "adSubnet",
     "subnetPrefix": "10.0.0.0/24",
     "publicIPAddressName": "myPublicIP",
-    "vmName": "ms2",
     "virtualNetworkName": "adVNET",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]",
     "domainJoinOptions": 3
