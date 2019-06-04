@@ -1,5 +1,7 @@
 #
-(New-Object System.Net.WebClient)
+#(new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/craiglandis/scripts/master/install-wmf.ps1', "$env:temp\install-wmf.ps1"); set-executionpolicy unrestricted -force; invoke-expression -command "$env:temp\install-wmf.ps1"
+
+
 $webClient = New-Object System.Net.WebClient
 
 if ((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 461814)
@@ -16,8 +18,10 @@ else
     invoke-expression -command "$filePath /q /norestart"
 
     do {
+        write-host "Waiting for NET Framework 4.72 install to complete"
         start-sleep 5
     } until ((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 461814)
+    write-host "NET Framework 4.72 install completed"
 }
 
 if (get-wmiobject -Query "Select HotFixID from Win32_QuickFixEngineering where HotFixID='KB3191566'")
@@ -55,14 +59,17 @@ else
     do {
         start-sleep 5
     } until (get-wmiobject -Query "Select HotFixID from Win32_QuickFixEngineering where HotFixID='KB3191566'")
+    write-host "restart-computer -force"
 }
 
 New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\StreamProvider -Name LastFullPayloadTime -Value 0 -PropertyType DWord -Force
 install-packageprovider -name NuGet -MinimumVersion 2.8.5.201 -Force
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 install-module -name PSWindowsUpdate -AllowClobber -Force
-write-host "restart-computer -force"
+
+#schtasks /create /tn install /tr c:\apps\myapp.exe /sc onstart
+
 <#
-get-windowsupdate -Install -AcceptAll -AutoReboot -IgnoreUserInput -RecurseCycle 5
+get-windowsupdate -Install -AcceptAll -AutoReboot -IgnoreUserInput -RecurseCycle 5 -verbose
 c:\windows\system32\sysprep\sysprep.exe /generalize /oobe /shutdown
 #>
