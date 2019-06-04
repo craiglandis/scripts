@@ -1,3 +1,5 @@
+#
+(New-Object System.Net.WebClient)
 $webClient = New-Object System.Net.WebClient
 
 if ((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 461814)
@@ -59,8 +61,8 @@ New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\StreamProvider -Name Las
 install-packageprovider -name NuGet -MinimumVersion 2.8.5.201 -Force
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 install-module -name PSWindowsUpdate -AllowClobber -Force
-
+write-host "restart-computer -force"
 <#
-get-windowsupdate -Install -AcceptAll -IgnoreReboot
 get-windowsupdate -Install -AcceptAll -AutoReboot -IgnoreUserInput -RecurseCycle 5
+c:\windows\system32\sysprep\sysprep.exe /generalize /oobe /shutdown
 #>
