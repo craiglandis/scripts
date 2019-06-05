@@ -1,4 +1,4 @@
-#(new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/craiglandis/scripts/master/install-wmf.ps1', "$env:temp\install-wmf.ps1"); set-executionpolicy unrestricted -force; invoke-expression -command "$env:windir\temp\install-wmf.ps1"
+#(new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/craiglandis/scripts/master/install-wmf.ps1', "$env:windir\temp\install-wmf.ps1"); set-executionpolicy unrestricted -force; invoke-expression -command "$env:windir\temp\install-wmf.ps1"
 
 function out-log()
 {
@@ -44,7 +44,6 @@ $logFile = "$scriptPathParent\$($scriptName)_$($timestamp).log"
 out-log "scriptPath : $scriptPath"
 out-log "scriptPathParent : $scriptPathParent"
 out-log $logFile
-exit
 $webClient = New-Object System.Net.WebClient
 
 if ((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 461814)
