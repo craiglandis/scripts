@@ -1,7 +1,7 @@
 <#
 (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/craiglandis/scripts/master/install-wmf.ps1', "$env:windir\temp\install-wmf.ps1"); set-executionpolicy unrestricted -force; invoke-expression -command "$env:windir\temp\install-wmf.ps1"
 $imageName = 'MicrosoftWindowsServer.WindowsServer.2008-R2-SP1-smalldisk.2.127.20180613'
-new -imageName $imageName
+new -resourceGroupName test1 -name test1 -imageName 'MicrosoftWindowsServer.WindowsServer.2008-R2-SP1-smalldisk.2.127.20180613'
 https://virtual-simon.co.uk/deploying-multiple-vms-arm-templates-use-copy-copyindex/
 https://github.com/Azure/azure-quickstart-templates/tree/master/201-vm-copy-index-loops
 https://github.com/Azure/azure-quickstart-templates/tree/master/201-vm-copy-managed-disks/
@@ -137,7 +137,7 @@ if (get-packageprovider | where {$_.Name -eq 'NuGet'})
 else
 {
     out-log "Installing NuGet"
-    install-packageprovider -name NuGet -Force
+    install-packageprovider -name NuGet -Force | Out-Null
 }
 
 if ((Get-PSRepository -Name PSGallery).InstallationPolicy -eq 'Trusted')
