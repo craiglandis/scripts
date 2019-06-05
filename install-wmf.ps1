@@ -130,7 +130,7 @@ if (get-wmiobject -Query "Select HotFixID from Win32_QuickFixEngineering where H
     New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\StreamProvider -Name LastFullPayloadTime -Value 0 -PropertyType DWord -Force | Out-Null
 }
 
-if ([version](get-packageprovider nuget).Version -ge [version]'2.8.5.208')
+if (get-packageprovider | where {$_.Name -eq 'NuGet'})
 {
     out-log "NuGet already installed"
 }
