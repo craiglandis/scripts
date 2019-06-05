@@ -2,6 +2,10 @@
 (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/craiglandis/scripts/master/install-wmf.ps1', "$env:windir\temp\install-wmf.ps1"); set-executionpolicy unrestricted -force; invoke-expression -command "$env:windir\temp\install-wmf.ps1"
 $imageName = 'MicrosoftWindowsServer.WindowsServer.2008-R2-SP1-smalldisk.2.127.20180613'
 new -imageName $imageName
+https://virtual-simon.co.uk/deploying-multiple-vms-arm-templates-use-copy-copyindex/
+https://github.com/Azure/azure-quickstart-templates/tree/master/201-vm-copy-index-loops
+https://github.com/Azure/azure-quickstart-templates/tree/master/201-vm-copy-managed-disks/
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-multiple
 #>
 
 function out-log()
@@ -112,6 +116,7 @@ else
     {
         out-log "Restarting to complete WMF 5.1 install"
         restart-computer -Force
+        exit
     }
     else
     {
