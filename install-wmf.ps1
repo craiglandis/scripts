@@ -1,5 +1,7 @@
 <#
 (new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/craiglandis/scripts/master/install-wmf.ps1', "$env:windir\temp\install-wmf.ps1"); set-executionpolicy unrestricted -force; invoke-expression -command "$env:windir\temp\install-wmf.ps1"
+$imageName = 'MicrosoftWindowsServer.WindowsServer.2008-R2-SP1-smalldisk.2.127.20180613'
+new -imageName $imageName
 #>
 
 function out-log()
@@ -153,7 +155,9 @@ else
     install-module -name PSWindowsUpdate -Force
 }
 
-<#
+out-log "Installing Windows Updates"
 get-windowsupdate -Install -AcceptAll -AutoReboot -IgnoreUserInput -RecurseCycle 5 -verbose
+
+<#
 c:\windows\system32\sysprep\sysprep.exe /generalize /oobe /shutdown
 #>
