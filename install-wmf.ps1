@@ -1,5 +1,4 @@
-#
-#(new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/craiglandis/scripts/master/install-wmf.ps1', "$env:temp\install-wmf.ps1"); set-executionpolicy unrestricted -force; invoke-expression -command "$env:temp\install-wmf.ps1"
+#(new-object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/craiglandis/scripts/master/install-wmf.ps1', "$env:temp\install-wmf.ps1"); set-executionpolicy unrestricted -force; invoke-expression -command "$env:windir\temp\install-wmf.ps1"
 
 function out-log()
 {
@@ -35,16 +34,17 @@ function out-log()
 }
 
 set-strictmode -version Latest
-$PSDefaultParameterValues['*:ErrorAction'] = 'Stop'
-$PSDefaultParameterValues['*:WarningAction'] = 'SilentlyContinue'
 
 $startTime = get-date
 $timestamp = get-date $startTime -format yyyyMMddhhmmss
-$scriptPath = split-path -path $MyInvocation.MyCommand.Path
+$scriptPath = $MyInvocation.MyCommand.Path
 $scriptPathParent = split-path -path $MyInvocation.MyCommand.Path -parent
 $scriptName = (split-path -path $MyInvocation.MyCommand.Path -leaf).Split('.')[0]
 $logFile = "$scriptPathParent\$($scriptName)_$($timestamp).log"
+out-log "scriptPath : $scriptPath"
+out-log "scriptPathParent : $scriptPathParent"
 out-log $logFile
+exit
 $webClient = New-Object System.Net.WebClient
 
 if ((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 461814)
@@ -101,6 +101,7 @@ else
 
     do {
         start-sleep 5
+        out-log "Installing WMF 5.1..."
     } until (get-wmiobject -Query "Select HotFixID from Win32_QuickFixEngineering where HotFixID='KB3191566'")
     out-log "Creating onstart scheduled task to run script again at startup:"
     out-log $scriptPath
