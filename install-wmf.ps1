@@ -124,14 +124,14 @@ if (get-wmiobject -Query "Select HotFixID from Win32_QuickFixEngineering where H
     New-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\StreamProvider -Name LastFullPayloadTime -Value 0 -PropertyType DWord -Force
 }
 
-if ([version](get-packageprovider nuget).Version -ge [version]'2.8.5.201')
+if ([version](get-packageprovider nuget).Version -ge [version]'2.8.5.208')
 {
     out-log "NuGet already installed"
 }
 else
 {
     out-log "Installing NuGet"
-    install-packageprovider -name NuGet -MinimumVersion 2.8.5.201 -Force
+    install-packageprovider -name NuGet -Force
 }
 
 if ((Get-PSRepository -Name PSGallery).InstallationPolicy -eq 'Trusted')
