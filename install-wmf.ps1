@@ -6,6 +6,7 @@ https://virtual-simon.co.uk/deploying-multiple-vms-arm-templates-use-copy-copyin
 https://github.com/Azure/azure-quickstart-templates/tree/master/201-vm-copy-index-loops
 https://github.com/Azure/azure-quickstart-templates/tree/master/201-vm-copy-managed-disks/
 https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-multiple
+https://stackoverflow.com/questions/50593595/arm-template-how-create-multiple-vms-with-private-ips-in-one-resource-group
 #>
 
 function out-log()
@@ -111,7 +112,7 @@ else
         out-log "Installing WMF 5.1..."
     } until (get-wmiobject -Query "Select HotFixID from Win32_QuickFixEngineering where HotFixID='KB3191566'")
     out-log "Creating onstart scheduled task to run script again at startup:"
-    schtasks /create /tn bootstrap /sc onstart /delay 0000:30 /rl highest /ru system /tr "powershell.exe -file $scriptPath" /f
+    schtasks /create /tn bootstrap /sc onstart /delay 0000:30 /rl highest /ru system /tr "powershell.exe -executionpolicy bypass -file $scriptPath" /f
     if ($?)
     {
         out-log "Restarting to complete WMF 5.1 install"
