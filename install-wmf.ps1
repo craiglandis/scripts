@@ -161,9 +161,7 @@ else
     install-module -name PSWindowsUpdate -Force
 }
 
+<#
 out-log "Installing Windows Updates"
 get-windowsupdate -Install -AcceptAll -AutoReboot -IgnoreUserInput -RecurseCycle 5 -verbose
-
-<#
-c:\windows\system32\sysprep\sysprep.exe /generalize /oobe /shutdown
 #>
