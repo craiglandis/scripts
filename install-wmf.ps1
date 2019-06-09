@@ -53,6 +53,9 @@ $logFile = "$scriptPathParent\$($scriptName)_$($timestamp).log"
 out-log "scriptPath : $scriptPath"
 out-log "scriptPathParent : $scriptPathParent"
 out-log $logFile
+
+set-executionpolicy -executionpolicy ByPass -Force
+
 $webClient = New-Object System.Net.WebClient
 
 if ((Get-ItemProperty "HKLM:SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full").Release -ge 461814)
