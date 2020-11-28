@@ -30,7 +30,7 @@ Write-Progress 'This is Write-Progress output'
 Write-Warning 'This is Write-Warning output'
 Write-Verbose 'This is Write-Verbose output'
 
-#exit 1
+exit 1
 Stop-Transcript
 
 <#
