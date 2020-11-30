@@ -1,3 +1,4 @@
+Set-PSDebug -Trace 2
 Start-Transcript
 
 <#
@@ -30,8 +31,9 @@ Write-Progress 'This is Write-Progress output'
 Write-Warning 'This is Write-Warning output'
 Write-Verbose 'This is Write-Verbose output'
 
-exit 1
+#exit 1
 Stop-Transcript
+Set-PSDebug -Trace 0
 
 <#
 New-Item -Path 'HKLM:\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging' -Force
