@@ -1,0 +1,10 @@
+$scriptName = $MyInvocation.MyCommand.Name
+"'no cmdlet' output from $scriptName"
+Write-Debug "Write-Debug output from $scriptName"
+Write-Error "Write-Error output from $scriptName"
+Write-Host "Write-Host output from $scriptName"
+Write-Information "Write-Information output from $scriptName"
+Write-Output "Write-Output output from $scriptName"
+Write-Progress "Write-Progress output from $scriptName"
+Write-Warning "Write-Warning output from $scriptName"
+Write-Verbose "Write-Verbose output from $scriptName"
