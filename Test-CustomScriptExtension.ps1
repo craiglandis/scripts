@@ -1,3 +1,4 @@
+# Set-AzVMCustomScriptExtension -Location 'westus2' -ResourceGroupName 'rg1' -VMName 'vm1' -Name 'CustomScriptExtension' -FileUri 'https://raw.githubusercontent.com/craiglandis/scripts/master/Test-CustomScriptExtension.ps1' -Run 'Test-CustomScriptExtension.ps1'
 Set-PSDebug -Trace 2
 Start-Transcript
 
@@ -21,15 +22,16 @@ else
 }
 #>
 
-'This is "no cmdlet" output'
-Write-Debug 'This is Write-Debug output'
-Write-Error 'This is Write-Error output'
-Write-Host 'This is Write-Host output'
-Write-Information 'This is Write-Information output'
-Write-Output 'This is Write-Output output'
-Write-Progress 'This is Write-Progress output'
-Write-Warning 'This is Write-Warning output'
-Write-Verbose 'This is Write-Verbose output'
+$scriptName = $MyInvocation.MyCommand.Name
+"'no cmdlet' output from $scriptName"
+Write-Debug "Write-Debug output from $scriptName"
+Write-Error "Write-Error output from $scriptName"
+Write-Host "Write-Host output from $scriptName"
+Write-Information "Write-Information output from $scriptName"
+Write-Output "Write-Output output from $scriptName"
+Write-Progress "Write-Progress output from $scriptName"
+Write-Warning "Write-Warning output from $scriptName"
+Write-Verbose "Write-Verbose output from $scriptName"
 
 exit 1
 Stop-Transcript
