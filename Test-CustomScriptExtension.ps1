@@ -33,6 +33,8 @@ Write-Progress "Write-Progress output from $scriptName"
 Write-Warning "Write-Warning output from $scriptName"
 Write-Verbose "Write-Verbose output from $scriptName"
 
+Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/craiglandis/scripts/master/Test-CustomScriptExtensionChild.ps1'))
+
 exit 1
 Stop-Transcript
 Set-PSDebug -Trace 0
