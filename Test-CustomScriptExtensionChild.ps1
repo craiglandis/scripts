@@ -8,4 +8,4 @@ Write-Output "Write-Output output from $scriptName"
 Write-Progress "Write-Progress output from $scriptName"
 Write-Warning "Write-Warning output from $scriptName"
 Write-Verbose "Write-Verbose output from $scriptName"
-#exit 2
+exit 1
