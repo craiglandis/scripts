@@ -5,6 +5,11 @@
     Exports Microsoft-Windows-PowerShell/Operational Event ID 4104 events with local system account UserId S-1-5-18 to CSV file.
     The ScriptBlock column in the CSV file will have the full contents of the script.
 
+    To download the script into the VM from a PowerShell prompt in the VM, run: 
+    (New-Object System.Net.WebClient).DownloadFile('https://raw.githubusercontent.com/craiglandis/scripts/master/Get-ScriptBlockLogging.ps1', "$PWD\Get-ScriptBlockLogging.ps1")
+
+    Or you can view it on Github at https://github.com/craiglandis/scripts/blob/master/Get-ScriptBlockLogging.ps1, click on "Raw", then copy/paste the script into a new text file and save it as Get-ScriptBlockLogging.ps1
+  
     Scripts run through RunCommand or CustomScriptExtension run under the security context of the local system account, which always has security identifier (SID) S-1-5-18
     https://docs.microsoft.com/en-us/troubleshoot/windows-server/identity/security-identifiers-in-windows
 
