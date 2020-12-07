@@ -1,6 +1,7 @@
 Set-PSDebug -Trace 2
 Start-Transcript
 $scriptName = "Test-CustomScriptExtensionChild.ps1"
+"`$NestedPromptLevel: $NestedPromptLevel"
 "'no cmdlet' output from $scriptName"
 Write-Debug "Write-Debug output from $scriptName"
 Write-Error "Write-Error output from $scriptName"
