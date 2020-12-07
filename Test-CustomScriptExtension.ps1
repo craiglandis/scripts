@@ -1,5 +1,20 @@
-Set-PSDebug -Trace 2
-Start-Transcript
+param(
+  [switch]$transcript,
+  [switch]$runChildScript,
+  [int]$traceLevel,
+  [int]$exitCode
+)
+
+if ($transcript)
+{
+    Start-Transcript
+}
+
+if ($traceLevel)
+{
+    Set-PSDebug -Trace $traceLevel
+}
+
 $scriptName = $MyInvocation.MyCommand.Name
 "'no cmdlet' output from $scriptName"
 Write-Debug "Write-Debug output from $scriptName"
@@ -10,6 +25,18 @@ Write-Output "Write-Output output from $scriptName"
 Write-Progress "Write-Progress output from $scriptName"
 Write-Warning "Write-Warning output from $scriptName"
 Write-Verbose "Write-Verbose output from $scriptName"
-Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/craiglandis/scripts/master/Test-CustomScriptExtensionChild.ps1'))
-exit 1
-Stop-Transcript
+
+if ($runChildScript)
+{
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/craiglandis/scripts/master/Test-CustomScriptExtensionChild.ps1'))
+}
+
+if ($exitCode)
+{
+    exit $exitCode
+}
+
+if ($transcript)
+{
+    Stop-Transcript
+}
