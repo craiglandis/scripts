@@ -10,7 +10,7 @@ if ($transcript)
     Start-Transcript
 }
 
-if ($traceLevel)
+if ($traceLevel -gt 0)
 {
     Set-PSDebug -Trace $traceLevel
 }
@@ -32,7 +32,7 @@ if ($runChildScript)
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/craiglandis/scripts/master/Test-CustomScriptExtensionChild.ps1'))
 }
 
-if ($exitCode)
+if ($exitCode -gt 0)
 {
     exit $exitCode
 }
