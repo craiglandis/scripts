@@ -1,8 +1,8 @@
 param(
-  [switch]$transcript,
-  [switch]$runChildScript,
-  [int]$traceLevel,
-  [int]$exitCode
+  [switch]$transcript = $false,
+  [switch]$runChildScript = $false,
+  [int]$traceLevel = 0,
+  [int]$exitCode = 0
 )
 
 if ($transcript)
@@ -10,10 +10,7 @@ if ($transcript)
     Start-Transcript
 }
 
-if ($traceLevel -gt 0)
-{
-    Set-PSDebug -Trace $traceLevel
-}
+Set-PSDebug -Trace $traceLevel
 
 $scriptName = $MyInvocation.MyCommand.Name
 "`$NestedPromptLevel: $NestedPromptLevel"
