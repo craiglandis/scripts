@@ -16,6 +16,7 @@ if ($traceLevel)
 }
 
 $scriptName = $MyInvocation.MyCommand.Name
+"`$NestedPromptLevel: $NestedPromptLevel"
 "'no cmdlet' output from $scriptName"
 Write-Debug "Write-Debug output from $scriptName"
 Write-Error "Write-Error output from $scriptName"
