@@ -31,7 +31,7 @@ if ($runNestedScript)
 
 if ($exitCode -gt 0)
 {
-    exit $exitCode
+    #exit $exitCode
 }
 
 if ($transcript)
