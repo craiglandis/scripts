@@ -1,4 +1,4 @@
-Set-PSDebug -Trace 2
+Set-PSDebug -Trace 0
 Start-Transcript
 $scriptName = "Test-CustomScriptExtensionChild.ps1"
 "`$NestedPromptLevel: $NestedPromptLevel"
@@ -11,5 +11,5 @@ Write-Output "Write-Output output from $scriptName"
 Write-Progress "Write-Progress output from $scriptName"
 Write-Warning "Write-Warning output from $scriptName"
 Write-Verbose "Write-Verbose output from $scriptName"
-exit 2
+#exit 2
 Stop-Transcript
