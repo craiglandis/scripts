@@ -1,6 +1,6 @@
 param(
-  [switch]$transcript = $false,
-  [switch]$runChildScript = $false,
+  [switch]$transcript = $true,
+  [switch]$runNestedScript = $true,
   [int]$traceLevel = 0,
   [int]$exitCode = 0
 )
@@ -24,9 +24,9 @@ Write-Progress "Write-Progress output from $scriptName"
 Write-Warning "Write-Warning output from $scriptName"
 Write-Verbose "Write-Verbose output from $scriptName"
 
-if ($runChildScript)
+if ($runNestedScript)
 {
-    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/craiglandis/scripts/master/Test-CustomScriptExtensionChild.ps1'))
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/craiglandis/scripts/master/Test-CustomScriptExtensionNested.ps1'))
 }
 
 if ($exitCode -gt 0)
