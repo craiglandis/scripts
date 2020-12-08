@@ -1,14 +1,17 @@
 param(
-  [switch]$transcript = $true,
+#  [switch]$transcript = $true,
   [switch]$runNestedScript = $true,
   [int]$traceLevel = 0,
   [int]$exitCode = 0
 )
 
+Start-Transcript
+<#
 if ($transcript)
 {
     Start-Transcript
 }
+#>
 
 Set-PSDebug -Trace $traceLevel
 
@@ -34,7 +37,10 @@ if ($exitCode -gt 0)
     exit $exitCode
 }
 
+Stop-Transcript
+<#
 if ($transcript)
 {
     Stop-Transcript
 }
+#>
