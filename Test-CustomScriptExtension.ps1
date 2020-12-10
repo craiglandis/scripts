@@ -2,10 +2,10 @@ param(
 #  [switch]$transcript = $true,
   [switch]$runNestedScript = $true,
   [int]$traceLevel = 0,
-  [int]$exitCode = 0
+  [int]$exitCode = 2
 )
 
-Start-Transcript
+Start-Transcript -Path "$env:SystemRoot\Temp\PowerShell_transcript.$($env:COMPUTERNAME).$(Get-Date ((Get-Date).ToUniversalTime()) -f yyyyMMddHHmmss).txt" -IncludeInvocationHeader
 <#
 if ($transcript)
 {
