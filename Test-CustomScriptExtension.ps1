@@ -5,6 +5,7 @@ param(
   [int]$exitCode = 2
 )
 
+Set-PSDebug -Trace 2
 Start-Transcript -Path "$env:SystemRoot\Temp\PowerShell_transcript.$($env:COMPUTERNAME).$(Get-Date ((Get-Date).ToUniversalTime()) -f yyyyMMddHHmmss).txt" -IncludeInvocationHeader
 <#
 if ($transcript)
@@ -13,7 +14,8 @@ if ($transcript)
 }
 #>
 
-Set-PSDebug -Trace $traceLevel
+Set-PSDebug -Trace 2
+#Set-PSDebug -Trace $traceLevel
 
 $scriptName = $MyInvocation.MyCommand.Name
 "`$NestedPromptLevel: $NestedPromptLevel"
@@ -32,6 +34,7 @@ if ($runNestedScript)
     Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/craiglandis/scripts/master/Test-CustomScriptExtensionNested.ps1'))
 }
 
+exit 2
 if ($exitCode -gt 0)
 {
     exit $exitCode
